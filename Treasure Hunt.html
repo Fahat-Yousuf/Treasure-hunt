@@ -1,0 +1,123 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html lang="en">\
+<head>\
+    <meta charset="UTF-8">\
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+    <title>Quest for the Treasure</title>\
+    <style>\
+        body \{\
+            font-family: Arial, sans-serif;\
+            display: flex;\
+            justify-content: center;\
+            align-items: center;\
+            height: 100vh;\
+            background-color: #f0f0f0;\
+        \}\
+        .game-container \{\
+            text-align: center;\
+        \}\
+        .board \{\
+            display: grid;\
+            grid-template-columns: repeat(5, 50px);\
+            gap: 5px;\
+        \}\
+        .cell \{\
+            width: 50px;\
+            height: 50px;\
+            background-color: #ddd;\
+            display: flex;\
+            justify-content: center;\
+            align-items: center;\
+            border: 1px solid #aaa;\
+        \}\
+        .player \{\
+            background-color: blue;\
+            color: white;\
+        \}\
+        .player-2 \{\
+            background-color: red;\
+        \}\
+    </style>\
+</head>\
+<body>\
+    <div class="game-container">\
+        <h1>Quest for the Treasure</h1>\
+        <div class="board" id="board"></div>\
+        <div>\
+            <button onclick="movePlayer('up')">Up</button>\
+            <button onclick="movePlayer('down')">Down</button>\
+            <button onclick="movePlayer('left')">Left</button>\
+            <button onclick="movePlayer('right')">Right</button>\
+        </div>\
+        <p id="status"></p>\
+    </div>\
+    <script>\
+        const boardSize = 5;\
+        let player1Position = \{ x: 0, y: 0 \};\
+        let player2Position = \{ x: 4, y: 4 \};\
+        let currentPlayer = 1;\
+        const treasurePosition = \{\
+            x: Math.floor(Math.random() * boardSize),\
+            y: Math.floor(Math.random() * boardSize)\
+        \};\
+\
+        function createBoard() \{\
+            const board = document.getElementById('board');\
+            board.innerHTML = '';\
+            for (let y = 0; y < boardSize; y++) \{\
+                for (let x = 0; x < boardSize; x++) \{\
+                    const cell = document.createElement('div');\
+                    cell.className = 'cell';\
+                    if (player1Position.x === x && player1Position.y === y) \{\
+                        cell.classList.add('player');\
+                        cell.textContent = 'P1';\
+                    \} else if (player2Position.x === x && player2Position.y === y) \{\
+                        cell.classList.add('player-2');\
+                        cell.textContent = 'P2';\
+                    \}\
+                    board.appendChild(cell);\
+                \}\
+            \}\
+        \}\
+\
+        function movePlayer(direction) \{\
+            let position = currentPlayer === 1 ? player1Position : player2Position;\
+            switch (direction) \{\
+                case 'up':\
+                    position.y = (position.y - 1 + boardSize) % boardSize;\
+                    break;\
+                case 'down':\
+                    position.y = (position.y + 1) % boardSize;\
+                    break;\
+                case 'left':\
+                    position.x = (position.x - 1 + boardSize) % boardSize;\
+                    break;\
+                case 'right':\
+                    position.x = (position.x + 1) % boardSize;\
+                    break;\
+            \}\
+            checkWin();\
+            currentPlayer = currentPlayer === 1 ? 2 : 1;\
+            createBoard();\
+        \}\
+\
+        function checkWin() \{\
+            const position = currentPlayer === 1 ? player1Position : player2Position;\
+            if (position.x === treasurePosition.x && position.y === treasurePosition.y) \{\
+                document.getElementById('status').textContent = `Player $\{currentPlayer\} wins!`;\
+                document.querySelector('button[onclick]').disabled = true;\
+            \}\
+        \}\
+\
+        createBoard();\
+    </script>\
+</body>\
+</html>\
+}
